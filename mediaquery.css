@@ -94,3 +94,71 @@
       text-align: justify;
     }
 }
+
+/* For devices with a maximum width of 480px (small smartphones) */
+@media screen and (max-width: 480px) {
+  .section_pic-container {
+      width: 200px;
+      height: 200px;
+  }
+  
+  .title {
+      font-size: 1.5rem;
+  }
+  
+  .section_text_p2 {
+      font-size: 1rem;
+  }
+  
+  .btn {
+      padding: 0.5rem;
+      width: 6rem;
+      font-size: 0.8rem;
+  }
+  
+  .icon {
+      height: 1.5rem;
+  }
+  
+  .contact-info-container p {
+      font-size: 0.9rem;
+  }
+  
+  .email-icon {
+      height: 2rem;
+  }
+}
+
+/* For devices with a maximum width of 320px (very small smartphones) */
+@media screen and (max-width: 320px) {
+  .section_pic-container {
+      width: 150px;
+      height: 150px;
+  }
+  
+  .title {
+      font-size: 1.2rem;
+  }
+  
+  .section_text_p2 {
+      font-size: 0.8rem;
+  }
+  
+  .btn {
+      padding: 0.3rem;
+      width: 5rem;
+      font-size: 0.7rem;
+  }
+  
+  .icon {
+      height: 1.2rem;
+  }
+  
+  .contact-info-container p {
+      font-size: 0.8rem;
+  }
+  
+  .email-icon {
+      height: 1.5rem;
+  }
+}
