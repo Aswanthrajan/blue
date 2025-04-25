@@ -3,261 +3,245 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DeployEase - Blue-Green Deployment Manager</title>
-    <base href="/deployease/frontend/">
-    <link rel="stylesheet" href="src/css/style.css">
-    <link rel="stylesheet" href="src/css/dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="icon" type="image/png" href="assets/deployease-icon.png">
-    <script>
-        window.AppConfig = {
-            apiBaseUrl: "http://localhost:3000",
-            websocketUrl: "ws://localhost:8080"
-        };
-    </script>
+    <title>Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="mediaquery.css">
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <h1>DeployEase</h1>
-                <p>Blue-Green Deployment Manager</p>
+    <nav id="desktop-nav">
+        <div class="logo">ASWANTHRAJAN</div>
+        <div>
+            <ul class="nav-links">
+                <li><a href="#about">About</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#project">Project</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+    <nav id="hamburger-nav">
+        <div class="logo">ASWANTHRAJAN</div>
+        <div class="hamburger-menu">
+            <div class="hamburger-icon" onclick="togglemenu()">
+            <span></span>
+            <span></span>
+            <span></span>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
-                    <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
-                    <li><a href="#environments"><i class="fas fa-server"></i> Environments</a></li>
-                    <li><a href="#deployments"><i class="fas fa-rocket"></i> Deployments</a></li>
-                    <li><a href="#logs"><i class="fas fa-list"></i> Logs</a></li>
+            <div class="menu-links-wrapper">
+                <ul class="menu-links">
+                    <li><a href="#about" onclick="togglemenu()">about</a></li>
+                    <li><a href="#experience" onclick="togglemenu()">experience</a></li>
+                    <li><a href="#project" onclick="togglemenu()">project</a></li>
+                    <li><a href="#contact" onclick="togglemenu()">contact</a></li>
                 </ul>
-            </nav>
-            <div class="sidebar-footer">
-                <span>Final Year Project v1.0</span>
-            </div>
-        </aside>
-
-        <!-- Main Content Area -->
-        <main class="main-content">
-            <!-- Header -->
-            <header class="main-header">
-                <div class="header-left">
-                    <h2 id="pageTitle">Dashboard</h2>
-                </div>
-                <div class="header-right">
-                    <div class="dark-mode-toggle">
-                        <span>Dark Mode</span>
-                        <label class="switch">
-                            <input type="checkbox" id="darkModeToggle">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <button id="refreshButton" class="refresh-button">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                </div>
-            </header>
-
-            <!-- Content Sections -->
-            <div class="content-wrapper">
-                <!-- Dashboard Section -->
-                <section id="dashboard" class="content-section active">
-                    <div class="dashboard-grid">
-                        <!-- Environment Status Card -->
-                        <div class="card environment-status">
-                            <div class="card-header">
-                                <h3>Environment Status</h3>
-                                <span class="card-actions">
-                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
-                                </span>
-                            </div>
-                            <div class="card-body">
-                                <div class="environment-info">
-                                    <div id="blueEnv" class="environment blue">
-                                        <div class="env-header">
-                                            <h4>Blue Environment</h4>
-                                            <span id="blueStatus" class="status-badge active">Active</span>
-                                        </div>
-                                        <div class="env-details">
-                                            <div class="env-detail">
-                                                <span class="label">Branch:</span>
-                                                <span class="value">blue</span>
-                                            </div>
-                                            <div class="env-detail">
-                                                <span class="label">Status:</span>
-                                                <span id="blueHealthStatus" class="value">Healthy</span>
-                                            </div>
-                                            <div class="env-detail">
-                                                <span class="label">URL:</span>
-                                                <a id="blueUrl" class="value" target="_blank">View Site</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-                                    <div class="traffic-control">
-                                        <div class="traffic-switch">
-                                            <button id="switchTraffic" class="switch-button">Switch to Green</button>
-                                        </div>
-                                    </div>
-                                    
-                                    <div id="greenEnv" class="environment green">
-                                        <div class="env-header">
-                                            <h4>Green Environment</h4>
-                                            <span id="greenStatus" class="status-badge inactive">Inactive</span>
-                                        </div>
-                                        <div class="env-details">
-                                            <div class="env-detail">
-                                                <span class="label">Branch:</span>
-                                                <span class="value">green</span>
-                                            </div>
-                                            <div class="env-detail">
-                                                <span class="label">Status:</span>
-                                                <span id="greenHealthStatus" class="value">Healthy</span>
-                                            </div>
-                                            <div class="env-detail">
-                                                <span class="label">URL:</span>
-                                                <a id="greenUrl" class="value" target="_blank">View Site</a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="card-footer">
-                                <button id="newDeploymentBtn" class="primary-button">New Deployment</button>
-                                <button id="rollbackButton" class="secondary-button">Rollback</button>
-                            </div>
-                        </div>
-
-                        <!-- Recent Deployments Card -->
-                        <div class="card recent-deployments">
-                            <div class="card-header">
-                                <h3>Recent Deployments</h3>
-                                <span class="card-actions">
-                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
-                                </span>
-                            </div>
-                            <div class="card-body">
-                                <div class="deployment-list">
-                                    <table>
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>Timestamp</th>
-                                                <th>Branch</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="deploymentsTableBody">
-                                            <!-- Deployments will be populated here by JavaScript -->
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Logs Card -->
-                        <div class="card logs-card">
-                            <div class="card-header">
-                                <h3>Deployment Logs</h3>
-                                <span class="card-actions">
-                                    <button class="refresh-card"><i class="fas fa-sync-alt"></i></button>
-                                </span>
-                            </div>
-                            <div class="card-body">
-                                <div id="logs" class="logs-container">
-                                    <pre id="logContent"></pre>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Deployments Section -->
-                <section id="deployments" class="content-section">
-                    <div class="section-header">
-                        <h3>Deployment History</h3>
-                        <div class="section-actions">
-                            <button id="refreshDeployments" class="refresh-button">
-                                <i class="fas fa-sync-alt"></i> Refresh
-                            </button>
-                            <button id="newDeploymentBtn2" class="primary-button">
-                                <i class="fas fa-plus"></i> New Deployment
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="deployment-list">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>Timestamp</th>
-                                            <th>Branch</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="deploymentHistoryTableBody">
-                                        <!-- Deployment history will be populated here by JavaScript -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </div>
-        </main>
-    </div>
-
-    <!-- Deployment Modal -->
-    <div id="deployModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4>New Deployment</h4>
-                <button class="close-modal">&times;</button>
-            </div>
-            <div class="modal-body">
-                <form id="deployForm">
-                    <div class="form-group">
-                        <label for="deploymentType">Deployment Type</label>
-                        <select id="deploymentType">
-                            <option value="NEW">New Deployment (Blue)</option>
-                            <option value="UPDATE">Update Deployment (Green)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="fileUpload">Upload Files</label>
-                        <div class="file-drop-zone" id="fileDropZone">
-                            <i class="fas fa-cloud-upload-alt"></i>
-                            <p>Drag & drop your HTML/CSS/JS files here</p>
-                            <input type="file" id="fileUpload" multiple accept=".html,.css,.js" style="display: none;">
-                            <button type="button" class="secondary-button" id="browseFilesBtn" style="margin-top: 10px;">
-                                Browse Files
-                            </button>
-                        </div>
-                        <div id="fileList" class="file-list"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="commitMessage">Deployment Message</label>
-                        <input type="text" id="commitMessage" placeholder="Enter deployment description">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button id="cancelDeployBtn" class="secondary-button">Cancel</button>
-                <button id="confirmDeployBtn" class="primary-button">Deploy</button>
             </div>
         </div>
-    </div>
+    </nav>
+    <section id="profile">
+        <div class="section_pic-container">
+            <img src="./assets/profile 2.jpeg" alt="ASWANTHRAJAN profile"/>
+        </div>
+        <div class="section_text">
+            <p class="section_text_p1">Hello I'm</p>
+            <h1 class="title">ASWANTHRAJAN</h1>
+            <p class="section_text_p2">Frontend Developer</p>
+            <div class="btn-container">
+                <button class="btn btn-color-2" onclick="window.open('./assets/Aswanth Resume.pdf')">Resume</button>
+                <button class="btn btn-color-1" onclick="location.href='./#contact'">Contact info</button>
+            </div>
+            <div class="social-container">
+                <img src="./assets/linkedin.png" alt="linkedin" class="icon" onclick="location.href='https://linkedin.com'">
+                <img src="./assets/github.png" alt="github" class="icon" onclick="location.href='https://github.com'">
 
-    <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
-
-    <!-- Scripts -->
-<script type="module" src="src/js/main.js"></script>
-<script type="module" src="src/js/dashboard.js"></script>
-<script type="module" src="src/js/websocket.js"></script>
-<script type="module" src="src/js/gitDeploy.js"></script>
-<script type="module" src="src/js/config.js"></script> 
+            </div>
+        </div>
+    </section>
+    <section id="about">
+        <p class="section_text_p1">Get to know more about me</p>
+        <h1 class="title">About me</h1>
+        <div class="section-container">
+            <div class="section_pic-container">
+                <img src="./assets/profile 1.jpeg" alt="profile picture" class="about-pic">
+            </div>
+            <div class="about-details-container">
+                <div class="about-container">
+                    <div class="details-container">
+                        <img src="./assets/experience.png" alt="experience icon" class="icon">
+                        <h3>experience</h3>
+                        <p>beginer <br>Frontend development</p>
+                    </div>
+                    <div class="details-container">
+                        <img src="./assets/education.png" alt="education icon" class="icon">
+                        <h3>education</h3>
+                        <p>BCA DevOps and Automation</p>
+                    </div>
+                </div>
+                <div class="text-container">
+                    <p>Pursuing Bachelor of Computer Application with
+                        specialization in DevOps and automation with coding
+                        knowledge in different programming languages. Fostering
+                        knowledge related to Web Development. A motivated and
+                        dedicated individual seeking a position that involves regular
+                        use of these skills.
+                    </p>
+                </div>
+            </div>
+        </div>
+        <img src="./assets/arrow.png" alt="arrow icon" class="icon arrow" onclick="location.href='./#experience'">
+    </section>
+    <section id="experience">
+        <p class="section_text_p1">Explore my</p>
+        <h1 class="title">Experience</h1>
+        <div class="experience-details-container">
+            <div class="about-container">
+                <div class="details-container">
+                    <h2 class="experience-sub-title">Frontend Development</h2>
+                    <div class="article-container">
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>HTML</h3>
+                                <p>Intermediate</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>CSS</h3>
+                                <p>Intermediate</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>JS</h3>
+                                <p>Beginer</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>Python</h3>
+                                <p>Intermediate</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+                <div class="details-container">
+                    <h2 class="experience-sub-title">Backend Development</h2>
+                    <div class="article-container">
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>MySQL</h3>
+                                <p>Beginer</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>PHP</h3>
+                                <p>Beginer</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>Git</h3>
+                                <p>Beginer</p>
+                            </div>
+                        </article>
+                        <article>
+                            <img src="./assets/checkmark.png" alt="experience icon" class="icon">
+                            <div>
+                                <h3>GitHub</h3>
+                                <p>Intermediate</p>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <img src="./assets/arrow.png" alt="arrow icon" class="icon arrow" onclick="location.href='./#project'">
+    </section>
+    <section id="project">
+        <p class="section_text_p1">Browse my recent</p>
+        <h1 class="title">PROJECTS</h1>
+        <div class="experience-details-container">
+            <div class="about-container">
+            <div class="details-container color-container">
+                <div class="article-container">
+                    <img src="./assets/project-1.png" alt="PROJECT 1" class="project-img">
+                </div>
+                <h2 class="experience-sub-title project-title">PROJECT 1</h2>
+                <div class="btn-container">
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    GitHub
+                    </button>
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    Demo
+                    </button>
+                </div>
+            </div>
+            <div class="details-container color-container">
+                <div class="article-container">
+                    <img src="./assets/project-2.png" alt="PROJECT 2" class="project-img">
+                </div>
+                <h2 class="experience-sub-title project-title">PROJECT 2</h2>
+                <div class="btn-container">
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    GitHub
+                    </button>
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    Demo
+                    </button>
+                </div>
+            </div>
+            <div class="details-container color-container">
+                <div class="article-container">
+                    <img src="./assets/project-3.png" alt="PROJECT 3" class="project-img">
+                </div>
+                <h2 class="experience-sub-title project-title">PROJECT 3</h2>
+                <div class="btn-container">
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    GitHub
+                    </button>
+                    <button class="btn btn-color-2 project-btn" onclick="location.href='https://github.com/Aswanthrajan'">
+                    Demo
+                    </button>
+                </div>
+            </div>
+            </div>
+        </div>
+        <img src="./assets/arrow.png" alt="arrow icon" class="icon arrow" onclick="location.href='./#contact'">
+    </section>
+    <section id="contact">
+        <p class="section_text_p1">Get in touch</p>
+        <h1 class="title">Contact Me</h1>
+        <div class="contact-info-upper-container">
+            <div class="contact-info-container">
+                <img src="./assets/email.png" alt="email icon" class="icon contact-icon email-icon">
+                <p><a href="mailto:aswanthrajan0@gmail.com">aswanthrajan0@gmail.com</a></p>
+            </div>
+            <div class="contact-info-container">
+                <img src="./assets/linkedin.png" alt="linkedin icon" class="icon contact-icon linkedin-icon">
+                <p><a href="https://www.linkedin.com/in/aswanth-rajan-324a27250/">linkedin</a></p>
+            </div>
+        </div>
+    </section>
+    <footer>
+        <nav>
+            <div class="nav-links-container">
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#experience">Experience</a></li>
+                    <li><a href="#project">Project</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+        <p>Copyright &#169; 2024 Aswanthrajan. All Rights Reserved</p>
+    </footer>
+    <script src="script.js"></script>
 </body>
 </html>
