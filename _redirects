@@ -1,0 +1,15 @@
+# DeployEase Blue-Green Traffic Routing
+/*  /blue/:splat  200!
+/   /blue/index.html  200!
+
+# API and static assets (no redirection)
+/.netlify/*  /.netlify/:splat  200
+/api/*  /api/:splat  200
+/assets/*  /assets/:splat  200
+
+# Explicitly prevent redirects for certain paths
+/favicon.ico /favicon.ico 200
+/robots.txt /robots.txt 200
+
+# Configuration marker - DO NOT REMOVE
+# ACTIVE_BRANCH: blue
